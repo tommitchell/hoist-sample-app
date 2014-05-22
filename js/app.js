@@ -1,20 +1,24 @@
 var app, key;
 $(function() {
 
+	var settingsLocation = window.location.href.indexOf("localhost") !== -1 ? "./hoist.json" : "/settings";
 
-	Hoist.apiKey("<key>");
-	key = "<key>"; //Saved globally for use in profile pictures
+	$.getJSON(settingsLocation, function(settings) {
 
-	//Account Controller
-	window.account = new AccountManager();
+		Hoist.apiKey(settings.apiKey);
+		key = settings.apiKey;
 
-	//If logged in, start the app, or show the login screen
-	Hoist.status(function(member) {
-		app = new App(member);
-	}, function() {
-		account.drawLogin();
+		//Account Controller
+		window.account = new AccountManager();
+
+		//If logged in, start the app, or show the login screen
+		Hoist.status(function(member) {
+			app = new App(member);
+		}, function() {
+			account.drawLogin();
+		});
+
 	});
-
 
 });
 
